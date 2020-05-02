@@ -4,11 +4,19 @@ mkfs_jffs2_SOURCES = \
 	jffsX-utils/compr_zlib.c \
 	jffsX-utils/compr.h \
 	jffsX-utils/rbtree.c \
-	jffsX-utils/compr_lzo.c \
+	jffsX-utils/compr_lzma.c \
+	jffsX-utils/lzma/LzFind.c \
+	jffsX-utils/lzma/LzmaEnc.c \
+	jffsX-utils/lzma/LzmaDec.c \
 	jffsX-utils/compr.c \
 	jffsX-utils/compr_rtime.c
+
+if !WITHOUT_LZO
+mkfs_jffs2_SOURCES += jffsX-utils/compr_lzo.c
+endif
+
 mkfs_jffs2_LDADD = libmtd.a $(ZLIB_LIBS) $(LZO_LIBS)
-mkfs_jffs2_CPPFLAGS = $(AM_CPPFLAGS) $(ZLIB_CFLAGS) $(LZO_CFLAGS)
+mkfs_jffs2_CPPFLAGS = $(AM_CPPFLAGS) $(ZLIB_CFLAGS) $(LZO_CFLAGS) -I./include/linux/lzma
 
 jffs2reader_SOURCES = jffsX-utils/jffs2reader.c
 jffs2reader_LDADD = libmtd.a $(ZLIB_LIBS) $(LZO_LIBS)
